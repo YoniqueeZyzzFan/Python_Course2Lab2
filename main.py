@@ -2,26 +2,25 @@
 
 import re
 import json
-import time
 import os
 from tqdm import tqdm
 import argparse
 
 
 class File:
-    '''
+    """
     Объект класса File нужен, для хранения данных из файла,
     которые должны подвергнуться валидации.
     Attributes:
         __data - хранит в себе данные, считанные с файла
-    '''
+    """
     __data: object
 
     def __init__(self, f: str):
-        '''
+        """
         __init__ - инициалузирует экземпляр класса данных с файла
         :param f: Показывает путь к файлу с данными, которые необходиммо считать
-        '''
+        """
         try:
             if os.path.getsize(f) > 0:
                 self.__data = json.load(open(f, encoding='windows-1251'))
@@ -38,7 +37,7 @@ class File:
 
 
 class Validator:
-    '''
+    """
     class Validator - принимает в себя данные о каком либо пользователя, и с помощью его методов, можно проверить их корекктность
     Attributes:
         email: str - хранит электронную почту пользователя
@@ -50,7 +49,7 @@ class Validator:
         political_view: str - хранит политические взгляды пользователя
         worldview: str - хранит взгляд на мир пользователя
         address: str - хранит адрес проживания пользователя
-    '''
+    """
     __email: str
     __height: str
     __snils: str
@@ -61,11 +60,11 @@ class Validator:
     __worldview: str
     __address: str
 
-    def __init__(self, d: object):
-        '''
+    def __init__(self, d: dict):
+        """
         __init__ - служит для записи данных пользователя в различные поля, для проведенеия валидации
         :param d: - передает данные, которые нужно записать в валидатор
-        '''
+        """
         self.__email = d['email']
         self.__height = d['height']
         self.__snils = d['snils']
@@ -77,9 +76,9 @@ class Validator:
         self.__address = d['address']
 
     def validation(self):
-        if re.match(r"[\w\.-]+[\w]+@[\w]+[?\.\w]\w{2,4}[.]\w+$", self.__email) is None:
+        if re.match(r"[\w.-]+[\w]+@[\w]+[?.\w]\w{2,4}[.]\w+$", self.__email) is None:
             return 'email'
-        if re.match(r"[\d]+?[\.]\d+", str(self.__height)) is None or float(self.__height) <= 0 or float(
+        if re.match(r"[\d]+?[.]\d+", str(self.__height)) is None or float(self.__height) <= 0 or float(
                 self.__height) >= 230:
             return 'height'
         if re.match(r"[\d]{11}", self.__snils) is None:
@@ -99,9 +98,6 @@ class Validator:
         return "True"
 
 
-# path = '67.txt'
-# output = open('69.txt', 'w')
-# file = File(path)
 parser = argparse.ArgumentParser(description="main")
 parser.add_argument("-input", type=str,
                     help="Это обязательный строковый позиционный аргумент, который указывает, с какого файла будут считаны данные",
@@ -139,7 +135,7 @@ with tqdm(total=100) as progressbar:
                          + "address: " + i["address"] + "\n" + "__________________________________________\n")
         else:
             counter_false += 1
-        progressbar.update(100/counter)
+        progressbar.update(100 / counter)
 
 print("Количество ошибок из-за опредленных полей: \nВсего пользователей: " + str(
     counter) + "\nЧисло валидных записей - " + str(counter - counter_false) + "\nЧисло невалидных записей - " + str(
