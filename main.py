@@ -5,6 +5,7 @@ import json
 import time
 import os
 from tqdm import tqdm
+import argparse
 
 
 class File:
@@ -98,9 +99,20 @@ class Validator:
         return "True"
 
 
-path = '67.txt'
-output = open('69.txt', 'w')
-file = File(path)
+# path = '67.txt'
+# output = open('69.txt', 'w')
+# file = File(path)
+parser = argparse.ArgumentParser(description="main")
+parser.add_argument("-input", type=str,
+                    help="Это обязательный строковый позиционный аргумент, который указывает, с какого файла будут считаны данные",
+                    dest="file_input")
+parser.add_argument("-output", type=str,
+                    help="Это необязательный позиционный аргумент, который указывает, куда будут сохранены валидные данные",
+                    dest="file_output")
+args = parser.parse_args()
+file = File(args.file_input)
+output = open(args.file_output, 'w')
+
 dict_err = {"email": 0,
             "height": 0,
             "snils": 0,
@@ -111,7 +123,10 @@ dict_err = {"email": 0,
             "address": 0,
             "political": 0,
             "True": 0}
-
+counter = 0
+for i in file.data:
+    counter += 1
+counter_false = 0
 with tqdm(total=100) as progressbar:
     for i in file.data:
         f = Validator(i)
@@ -122,8 +137,13 @@ with tqdm(total=100) as progressbar:
                          "university: " + i["university"] + "\n" + "age: " + str(i["age"]) + "\n" +
                          "political_views: " + i["political_views"] + "\n" + "worldview: " + i["worldview"] + "\n"
                          + "address: " + i["address"] + "\n" + "__________________________________________\n")
-        progressbar.update(3)
+        else:
+            counter_false += 1
+        progressbar.update(100/counter)
 
-print("Количество ошибок из-за опредленных полей: ")
+print("Количество ошибок из-за опредленных полей: \nВсего пользователей: " + str(
+    counter) + "\nЧисло валидных записей - " + str(counter - counter_false) + "\nЧисло невалидных записей - " + str(
+    counter_false))
 for i in dict_err:
-    print(i + ": "+ str(dict_err[i]))
+    print(i + ": " + str(dict_err[i]))
+output.close()
