@@ -27,10 +27,11 @@ class File:
         except OSError:
             print("В файле хранится неверный формат данных или файла по данному пути не существует")
 
-    def get_data(self):
+    @property
+    def data(self):
         '''
         get_data - метод, который вернет данные содержащиеся в поле data
-        :return:
+        :return: object
         '''
         return self.__data
 
@@ -75,38 +76,54 @@ class Validator:
         self.__address = d['address']
 
     def validation(self):
-        if re.findall(r"[\w\.-]+[\w]+@[\w]+[?\.\w]\w{2,4}[.]\w+$", self.__email) is None:
-            raise "email"
-        if re.findall(r"[\d]+?[\.]\d+", self.__height) is None and float(self.__height) <= 0 and float(
+        if re.match(r"[\w\.-]+[\w]+@[\w]+[?\.\w]\w{2,4}[.]\w+$", self.__email) is None:
+            return 'email'
+        if re.match(r"[\d]+?[\.]\d+", str(self.__height)) is None or float(self.__height) <= 0 or float(
                 self.__height) >= 230:
-            raise "height"
-        if re.findall(r"[\d]{11}", self.__snils) is None:
-            raise "snils"
-        if re.findall(r"^[\d]{2}? [\d]+", self.__passport_series) is None and len(
-                re.findall(r"^[\d]{2}? [\d]+", self.__passport_series)) != len(self.__passport_series):
-            raise "passport_series"
-        if re.findall(r"^[\D]+", self.__university) is None:
-            raise "university"
-        if re.findall(r"^[\d]{3}$", self.__age) is None and 0 >= int(self.__age) >= 120:
-            raise "age"
-        if re.findall(r"^[\D]+$", self.__worldview) is None:
-            raise "worldview"
-        if re.findall(r"^(?:ул. \w+)\ (\w|\ )(\W+|\w+)\d+$", self.__address) is None:
-            raise "address"
-        if re.findall(r"^\D+$", self.__political_views) is None:
-            raise "political_views"
-
-        path = '67.txt'
-        path_to_save = '69.txt'
-        data = File(path)
-        err_email = 0
-        err_height = 0
-        err_snils = 0
-        err_passport = 0
-        err_univer = 0
-        err_age = 0
-        err_worldview = 0
-        err_address = 0
-        err_political = 0
+            return 'height'
+        if re.match(r"[\d]{11}", self.__snils) is None:
+            return 'snils'
+        if re.match(r"^[\d]{2}? [\d]{2}", self.__passport_series) is None:
+            return 'passport'
+        if re.match(r"^[\D]+", self.__university) is None:
+            return 'university'
+        if re.match(r"^\d+", str(self.__age)) is None or 0 >= int(self.__age) >= 120:
+            return 'age'
+        if re.match(r"^[\D]+$", self.__worldview) is None:
+            return 'worldview'
+        if re.match(r"(^ул\.\s[\w .-]+\d+)", self.__address) is None:
+            return 'address'
+        if re.match(r"^\D+$", self.__political_views) is None:
+            return 'political'
+        return "True"
 
 
+path = '67.txt'
+output = open('69.txt', 'w')
+file = File(path)
+dict_err = {"email": 0,
+            "height": 0,
+            "snils": 0,
+            "passport": 0,
+            "univer": 0,
+            "age": 0,
+            "worldview": 0,
+            "address": 0,
+            "political": 0,
+            "True": 0}
+
+with tqdm(total=100) as progressbar:
+    for i in file.data:
+        f = Validator(i)
+        dict_err[f.validation()] += 1
+        if f.validation() == "True":
+            output.write("email: " + i["email"] + "\n" + "height:" + str(i["height"]) + "\n" +
+                         "snils: " + str(i["snils"]) + "\n" + "passport_series:" + str(i["passport_series"]) + "\n" +
+                         "university: " + i["university"] + "\n" + "age: " + str(i["age"]) + "\n" +
+                         "political_views: " + i["political_views"] + "\n" + "worldview: " + i["worldview"] + "\n"
+                         + "address: " + i["address"] + "\n" + "__________________________________________\n")
+        progressbar.update(3)
+
+print("Количество ошибок из-за опредленных полей: ")
+for i in dict_err:
+    print(i + ": "+ str(dict_err[i]))
