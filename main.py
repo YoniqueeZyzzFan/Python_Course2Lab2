@@ -14,6 +14,7 @@ class File:
     Attributes:
         __data - хранит в себе данные, считанные с файла
     """
+
     def __init__(self, f: str):
         """
         __init__ - инициалузирует экземпляр класса данных с файла
@@ -23,7 +24,8 @@ class File:
             if os.path.getsize(f) > 0:
                 self.__data = json.load(open(f, encoding='windows-1251'))
         except OSError:
-            print("В файле хранится неверный формат данных или файла по данному пути не существует")
+            print(
+                "В файле хранится неверный формат данных или файла по данному пути не существует")
 
     @property
     def data(self):
@@ -65,7 +67,8 @@ class Validator:
         self.__address = d['address']
 
     def validation(self):
-        if re.match(r"[\w.-]+[\w]+@[\w]+[?.\w]\w{2,4}[.]\w+$", self.__email) is None:
+        if re.match(
+                r"[\w.-]+[\w]+@[\w]+[?.\w]\w{2,4}[.]\w+$", self.__email) is None:
             return 'email'
         if re.match(r"[\d]+?[.]\d+", str(self.__height)) is None or float(self.__height) <= 0 or float(
                 self.__height) >= 230:
@@ -76,7 +79,8 @@ class Validator:
             return 'passport'
         if re.match(r"^[\D]+", self.__university) is None:
             return 'university'
-        if re.match(r"^\d+", str(self.__age)) is None or 0 >= int(self.__age) >= 120:
+        if re.match(r"^\d+", str(self.__age)
+                    ) is None or 0 >= int(self.__age) >= 120:
             return 'age'
         if re.match(r"^[\D]+$", self.__worldview) is None:
             return 'worldview'
@@ -120,7 +124,9 @@ with tqdm(total=100) as progressbar:
             output.write("email: " + i["email"] + "\n" + "height:" + str(i["height"]) + "\n" +
                          "snils: " + str(i["snils"]) + "\n" + "passport_series:" + str(i["passport_series"]) + "\n" +
                          "university: " + i["university"] + "\n" + "age: " + str(i["age"]) + "\n" +
-                         "political_views: " + i["political_views"] + "\n" + "worldview: " + i["worldview"] + "\n"
+                         "political_views: " +
+                         i["political_views"] + "\n" +
+                         "worldview: " + i["worldview"] + "\n"
                          + "address: " + i["address"] + "\n" + "__________________________________________\n")
         else:
             counter_false += 1
