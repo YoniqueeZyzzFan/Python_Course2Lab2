@@ -14,8 +14,6 @@ class File:
     Attributes:
         __data - хранит в себе данные, считанные с файла
     """
-    __data: object
-
     def __init__(self, f: str):
         """
         __init__ - инициалузирует экземпляр класса данных с файла
@@ -50,15 +48,6 @@ class Validator:
         worldview: str - хранит взгляд на мир пользователя
         address: str - хранит адрес проживания пользователя
     """
-    __email: str
-    __height: str
-    __snils: str
-    __passport_series: str
-    __university: str
-    __age: str
-    __political_views: str
-    __worldview: str
-    __address: str
 
     def __init__(self, d: dict):
         """
