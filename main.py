@@ -68,7 +68,7 @@ class Validator:
 
     def validation(self):
         if re.match(
-                r"[\w.-]+[\w]+@[\w]+[?.\w]\w{2,4}[.]\w+$", self.__email) is None:
+                r"[\w.-_]+[\w]+@[\w]+[?.\w]\w{2,4}[.]\w+$", self.__email) is None:
             return 'email'
         if re.match(r"[\d]+?[.]\d+", str(self.__height)) is None or float(self.__height) <= 0 or float(
                 self.__height) >= 230:
