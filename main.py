@@ -129,34 +129,7 @@ with tqdm(file.data, desc='Валидация записей') as progressbar:
         f = Validator(i)
         dict_err[f.validation()] += 1
         if f.validation() == "True":
-            output.write("email: " +
-                         i["email"] +
-                         "\n" +
-                         "height:" +
-                         str(i["height"]) +
-                         "\n" +
-                         "snils: " +
-                         str(i["snils"]) +
-                         "\n" +
-                         "passport_series:" +
-                         str(i["passport_series"]) +
-                         "\n" +
-                         "university: " +
-                         i["university"] +
-                         "\n" +
-                         "age: " +
-                         str(i["age"]) +
-                         "\n" +
-                         "political_views: " +
-                         i["political_views"] +
-                         "\n" +
-                         "worldview: " +
-                         i["worldview"] +
-                         "\n" +
-                         "address: " +
-                         i["address"] +
-                         "\n" +
-                         "__________________________________________\n")
+            output.write(str(i) + "\n")
         else:
             counter_false += 1
         progressbar.update(1)
