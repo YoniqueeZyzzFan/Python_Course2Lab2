@@ -68,9 +68,13 @@ class Validator:
 
     def validation(self):
         if re.match(
-                r"[\w.-_]+[\w]+@[\w]+[?.\w]\w{2,4}[.]\w+$", self.__email) is None:
+            r"[\w.-_]+[\w]+@[\w]+[?.\w]\w{2,4}[.]\w+$",
+                self.__email) is None:
             return 'email'
-        if re.match(r"^[0-9]+\.[0-9]+$", str(self.__height)) is None or float(self.__height) <= 0 or float(
+        if re.match(
+                r"^[0-9]+\.[0-9]+$", str(
+                    self.__height)) is None or float(
+                self.__height) <= 0 or float(
                 self.__height) >= 230:
             return 'height'
         if re.match(r"^\d{11}$", self.__snils) is None:
@@ -92,12 +96,16 @@ class Validator:
 
 
 parser = argparse.ArgumentParser(description="main")
-parser.add_argument("-input", type=str,
-                    help="Это обязательный строковый позиционный аргумент, который указывает, с какого файла будут считаны данные",
-                    dest="file_input")
-parser.add_argument("-output", type=str,
-                    help="Это необязательный позиционный аргумент, который указывает, куда будут сохранены валидные данные",
-                    dest="file_output")
+parser.add_argument(
+    "-input",
+    type=str,
+    help="Это обязательный строковый позиционный аргумент, который указывает, с какого файла будут считаны данные",
+    dest="file_input")
+parser.add_argument(
+    "-output",
+    type=str,
+    help="Это необязательный позиционный аргумент, который указывает, куда будут сохранены валидные данные",
+    dest="file_output")
 args = parser.parse_args()
 file = File(args.file_input)
 output = open(args.file_output, 'w')
@@ -116,25 +124,50 @@ counter = 0
 for i in file.data:
     counter += 1
 counter_false = 0
-with tqdm(total=100) as progressbar:
+with tqdm(file.data, desc='Валидация записей') as progressbar:
     for i in file.data:
         f = Validator(i)
         dict_err[f.validation()] += 1
         if f.validation() == "True":
-            output.write("email: " + i["email"] + "\n" + "height:" + str(i["height"]) + "\n" +
-                         "snils: " + str(i["snils"]) + "\n" + "passport_series:" + str(i["passport_series"]) + "\n" +
-                         "university: " + i["university"] + "\n" + "age: " + str(i["age"]) + "\n" +
+            output.write("email: " +
+                         i["email"] +
+                         "\n" +
+                         "height:" +
+                         str(i["height"]) +
+                         "\n" +
+                         "snils: " +
+                         str(i["snils"]) +
+                         "\n" +
+                         "passport_series:" +
+                         str(i["passport_series"]) +
+                         "\n" +
+                         "university: " +
+                         i["university"] +
+                         "\n" +
+                         "age: " +
+                         str(i["age"]) +
+                         "\n" +
                          "political_views: " +
-                         i["political_views"] + "\n" +
-                         "worldview: " + i["worldview"] + "\n"
-                         + "address: " + i["address"] + "\n" + "__________________________________________\n")
+                         i["political_views"] +
+                         "\n" +
+                         "worldview: " +
+                         i["worldview"] +
+                         "\n" +
+                         "address: " +
+                         i["address"] +
+                         "\n" +
+                         "__________________________________________\n")
         else:
             counter_false += 1
-        progressbar.update(100 / counter)
+        progressbar.update(1)
 
-print("Количество ошибок из-за опредленных полей: \nВсего пользователей: " + str(
-    counter) + "\nЧисло валидных записей - " + str(counter - counter_false) + "\nЧисло невалидных записей - " + str(
-    counter_false))
+print("Количество ошибок из-за опредленных полей: \nВсего пользователей: " +
+      str(counter) +
+      "\nЧисло валидных записей - " +
+      str(counter -
+          counter_false) +
+      "\nЧисло невалидных записей - " +
+      str(counter_false))
 for i in dict_err:
     print(i + ": " + str(dict_err[i]))
 output.close()
