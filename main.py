@@ -73,14 +73,14 @@ class Validator:
             Если все правильно, возвращает - 'True'
         """
         if re.match(
-            r"[\w.-_]+[\w]+@[\w]+[?.\w]\w{2,4}[.]\w+$",
+                r"[\w.-_]+[\w]+@[\w]+[?.\w]\w{2,4}[.]\w+$",
                 self.__email) is None:
             return 'email'
         if re.match(
                 r"^[0-9]+\.[0-9]+$", str(
                     self.__height)) is None or float(
-                self.__height) <= 0 or float(
-                self.__height) >= 230:
+            self.__height) <= 0 or float(
+            self.__height) >= 230:
             return 'height'
         if re.match(r"^\d{11}$", self.__snils) is None:
             return 'snils'
