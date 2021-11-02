@@ -51,11 +51,13 @@ class Validator:
         address: str - хранит адрес проживания пользователя
         info_worldview: list - хранит список, со взглядами на мир
         info_political: list - хранит список, с полит. взглядами
+        info_univer: list - хранит список, невалидных университетов
     """
     info_political = ['Анархистские', 'Умеренные', 'Либертарианские', 'Консервативные', 'Коммунистические',
                       'Либеральные', 'Индифферентные', 'Социалистические']
-    info_worldview= ['Буддизм', 'Пантеизм', 'Деизм', 'Иудаизм', 'Католицизм', 'Атеизм', 'Секулярный гуманизм',
+    info_worldview = ['Буддизм', 'Пантеизм', 'Деизм', 'Иудаизм', 'Католицизм', 'Атеизм', 'Секулярный гуманизм',
                       'Агностицизм', 'Конфуцианство']
+    info_univer = ['Дурмстранг', 'Шармбатон', 'Аретуза', 'Кирин-Тор', 'Хогвартс', 'Гвейсон Хайль']
 
     def __init__(self, d: dict):
         """
@@ -71,16 +73,6 @@ class Validator:
         self.__political_views = d['political_views']
         self.__worldview = d['worldview']
         self.__address = d['address']
-
-    # def fill_info(self):
-    # if self.__political_views in Validator.info_political:
-    # Validator.info_political[self.__political_views] += 1
-    # else:
-    # Validator.info_political[self.__political_views] = 1
-    # if self.__worldview in Validator.info_worldview:
-    # Validator.info_worldview[self.__worldview] += 1
-    # else:
-    # Validator.info_worldview[self.__worldview] = 1
 
     def validation(self):
         """
@@ -102,8 +94,8 @@ class Validator:
             return 'snils'
         if re.match(r"^[\d]{2}? [\d]{2}", self.__passport_series) is None:
             return 'passport'
-        if re.match(r"^[\D]+", self.__university) is None:
-            return 'university'
+        if re.match(r"^[\D]+", self.__university) is None or self.__university in Validator.info_univer:
+            return 'univer'
         if re.match(r"^\d+", str(self.__age)
                     ) is None or 0 >= int(self.__age) >= 120:
             return 'age'
@@ -113,7 +105,7 @@ class Validator:
             return 'worldview'
         if re.match(r"(^ул\.\s[\w .-]+\d+)", self.__address) is None:
             return 'address'
-        if re.match(r"^\D+$", self.__political_views) is None :
+        if re.match(r"^\D+$", self.__political_views) is None:
             return 'political'
         if self.__political_views not in Validator.info_political:
             return 'political'
