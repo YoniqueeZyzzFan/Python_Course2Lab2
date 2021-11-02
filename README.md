@@ -5,7 +5,7 @@ Validator for some information about users. Don't open Result.txt because there 
 
 ____ How to use - Python terminal:
       python main.py -i PATH1 -o PATH2                                                                                                                                      
-PATH1 - path to 67.txt
-PATH2 - where u want to place valid information
--i = -input
--o = -output
+PATH1 - path to 67.txt                                                                                                                                      
+PATH2 - where u want to place valid information                                                                                                                                     
+-i = -input                                                                                                                                     
+-o = -output                                                                                                                                     
