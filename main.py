@@ -67,6 +67,11 @@ class Validator:
         self.__address = d['address']
 
     def validation(self):
+        """
+        validation - служит для проверки корректности записей
+            Возвращает имя поля, где данные записаны некорректно
+            Если все правильно, возвращает - 'True'
+        """
         if re.match(
             r"[\w.-_]+[\w]+@[\w]+[?.\w]\w{2,4}[.]\w+$",
                 self.__email) is None:
