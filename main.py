@@ -70,10 +70,10 @@ class Validator:
         if re.match(
                 r"[\w.-_]+[\w]+@[\w]+[?.\w]\w{2,4}[.]\w+$", self.__email) is None:
             return 'email'
-        if re.match(r"[\d]+?[.]\d+", str(self.__height)) is None or float(self.__height) <= 0 or float(
+        if re.match(r"^[0-9]+\.[0-9]+$", str(self.__height)) is None or float(self.__height) <= 0 or float(
                 self.__height) >= 230:
             return 'height'
-        if re.match(r"[\d]{11}", self.__snils) is None:
+        if re.match(r"^\d{11}$", self.__snils) is None:
             return 'snils'
         if re.match(r"^[\d]{2}? [\d]{2}", self.__passport_series) is None:
             return 'passport'
