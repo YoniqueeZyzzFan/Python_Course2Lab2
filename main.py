@@ -49,7 +49,13 @@ class Validator:
         political_view: str - хранит политические взгляды пользователя
         worldview: str - хранит взгляд на мир пользователя
         address: str - хранит адрес проживания пользователя
+        info_worldview: list - хранит список, со взглядами на мир
+        info_political: list - хранит список, с полит. взглядами
     """
+    info_political = ['Анархистские', 'Умеренные', 'Либертарианские', 'Консервативные', 'Коммунистические',
+                      'Либеральные', 'Индифферентные', 'Социалистические']
+    info_worldview= ['Буддизм', 'Пантеизм', 'Деизм', 'Иудаизм', 'Католицизм', 'Атеизм', 'Секулярный гуманизм',
+                      'Агностицизм', 'Конфуцианство']
 
     def __init__(self, d: dict):
         """
@@ -65,6 +71,16 @@ class Validator:
         self.__political_views = d['political_views']
         self.__worldview = d['worldview']
         self.__address = d['address']
+
+    # def fill_info(self):
+    # if self.__political_views in Validator.info_political:
+    # Validator.info_political[self.__political_views] += 1
+    # else:
+    # Validator.info_political[self.__political_views] = 1
+    # if self.__worldview in Validator.info_worldview:
+    # Validator.info_worldview[self.__worldview] += 1
+    # else:
+    # Validator.info_worldview[self.__worldview] = 1
 
     def validation(self):
         """
@@ -93,9 +109,13 @@ class Validator:
             return 'age'
         if re.match(r"^[\D]+$", self.__worldview) is None:
             return 'worldview'
+        if self.__worldview not in Validator.info_worldview:
+            return 'worldview'
         if re.match(r"(^ул\.\s[\w .-]+\d+)", self.__address) is None:
             return 'address'
-        if re.match(r"^\D+$", self.__political_views) is None:
+        if re.match(r"^\D+$", self.__political_views) is None :
+            return 'political'
+        if self.__political_views not in Validator.info_political:
             return 'political'
         return "True"
 
@@ -125,6 +145,7 @@ dict_err = {"email": 0,
             "address": 0,
             "political": 0,
             "True": 0}
+
 counter = 0
 for i in file.data:
     counter += 1
