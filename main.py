@@ -126,6 +126,7 @@ parser.add_argument(
 args = parser.parse_args()
 file = File(args.file_input)
 output = open(args.file_output, 'w',  encoding='utf-8')
+output.write("[")
 
 dict_err = {"email": 0,
             "height": 0,
@@ -148,10 +149,12 @@ with tqdm(file.data, desc='Валидация записей') as progressbar:
         dict_err[f.validation()] += 1
         if f.validation() == "True":
             json.dump(i, output, ensure_ascii=False,)
+            output.write(',')
         else:
             counter_false += 1
         progressbar.update(1)
 
+output.write(']')
 output.close()
 print("Количество ошибок из-за опредленных полей: \nВсего пользователей: " +
       str(counter) +
