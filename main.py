@@ -147,7 +147,7 @@ with tqdm(file.data, desc='Валидация записей') as progressbar:
         f = Validator(i)
         dict_err[f.validation()] += 1
         if f.validation() == "True":
-            json.dump((str(i) + "\n"), output)
+            json.dump(i, output)
         else:
             counter_false += 1
         progressbar.update(1)
