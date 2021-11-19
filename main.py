@@ -62,6 +62,12 @@ def bucket_sort(dict_to_sort: dict) -> list:
         else:
             bucket_list[len(list_keys) - 1].append(list_keys[i])
     sorted_keys = []
+    for i in range(len(bucket_list)):
+        sorted_keys = sorted_keys + (sort_list(bucket_list[i]))
+    result_list = []
+    for key in sorted_keys:
+        result_list.append(dict_to_sort[key])
+    return result_list
 
 
 if __name__ == "__main__":
