@@ -74,6 +74,16 @@ class Validator:
         self.__worldview = d['worldview']
         self.__address = d['address']
 
+    @property
+    def data(self):
+        '''
+        get_data - метод, который вернет данные содержащиеся в поле data
+        :return: object
+        '''
+        return {'email': self.__email, 'height': self.__height, 'snils': self.__snils,
+                'passport_series': self.__passport_series, 'university': self.__university, 'age': self.__age,
+                'political_views': self.__political_views, 'worldview': self.__worldview, 'address': self.__address}
+
     def validation(self):
         """
         validation - служит для проверки корректности записей
@@ -111,55 +121,55 @@ class Validator:
             return 'political'
         return "True"
 
+if __name__ == '__main__':
+    parser = argparse.ArgumentParser(description="main")
+    parser.add_argument(
+        "-input",
+        type=str,
+        help="Это обязательный строковый позиционный аргумент, который указывает, с какого файла будут считаны данные",
+        dest="file_input")
+    parser.add_argument(
+        "-output",
+        type=str,
+        help="Это необязательный позиционный аргумент, который указывает, куда будут сохранены валидные данные",
+        dest="file_output")
+    args = parser.parse_args()
+    file = File(args.file_input)
+    output = open(args.file_output, 'w', encoding='utf-8')
+    list_to_save = []
+    dict_err = {"email": 0,
+                "height": 0,
+                "snils": 0,
+                "passport": 0,
+                "univer": 0,
+                "age": 0,
+                "worldview": 0,
+                "address": 0,
+                "political": 0,
+                "True": 0}
 
-parser = argparse.ArgumentParser(description="main")
-parser.add_argument(
-    "-input",
-    type=str,
-    help="Это обязательный строковый позиционный аргумент, который указывает, с какого файла будут считаны данные",
-    dest="file_input")
-parser.add_argument(
-    "-output",
-    type=str,
-    help="Это необязательный позиционный аргумент, который указывает, куда будут сохранены валидные данные",
-    dest="file_output")
-args = parser.parse_args()
-file = File(args.file_input)
-output = open(args.file_output, 'w', encoding='utf-8')
-list_to_save = []
-dict_err = {"email": 0,
-            "height": 0,
-            "snils": 0,
-            "passport": 0,
-            "univer": 0,
-            "age": 0,
-            "worldview": 0,
-            "address": 0,
-            "political": 0,
-            "True": 0}
-
-counter = 0
-for i in file.data:
-    counter += 1
-counter_false = 0
-with tqdm(file.data, desc='Валидация записей') as progressbar:
+    counter = 0
     for i in file.data:
-        f = Validator(i)
-        dict_err[f.validation()] += 1
-        if f.validation() == "True":
-            list_to_save.append(i)
-        else:
-            counter_false += 1
-        progressbar.update(1)
-json.dump(list_to_save, output)
-output.close()
-print("Количество ошибок из-за опредленных полей: \nВсего пользователей: " +
-      str(counter) +
-      "\nЧисло валидных записей - " +
-      str(counter -
-          counter_false) +
-      "\nЧисло невалидных записей - " +
-      str(counter_false))
-for i in dict_err:
-    print(i + ": " + str(dict_err[i]))
-output.close()
+        counter += 1
+    counter_false = 0
+    with tqdm(file.data, desc='Валидация записей') as progressbar:
+        for i in file.data:
+            f = Validator(i)
+            dict_err[f.validation()] += 1
+            if f.validation() == "True":
+                list_to_save.append(i)
+            else:
+                counter_false += 1
+            progressbar.update(1)
+    json.dump(list_to_save, output)
+    output.close()
+    print("Количество ошибок из-за опредленных полей: \nВсего пользователей: " +
+          str(counter) +
+          "\nЧисло валидных записей - " +
+          str(counter -
+              counter_false) +
+          "\nЧисло невалидных записей - " +
+          str(counter_false))
+    for i in dict_err:
+        print(i + ": " + str(dict_err[i]))
+    output.close()

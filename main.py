@@ -1,43 +1,7 @@
-import re
 import json
-import os
+import Validator
 from tqdm import tqdm
 import argparse
-
-
-class Human:
-    """
-       class Human - принимает в себя словарь данных о каком либо пользователя, и с помощью его методов, можно проверить их корекктность
-       Attributes:
-           email: str - хранит электронную почту пользователя
-           height: str - хранит рост пользователя
-           snils: str - хранит номер снилса пользователя
-           passport_series: str - хранит серию паспорта пользователя
-           university: str - хранит вуз пользователя
-           age: str - хранит возраст пользователя
-           political_view: str - хранит политические взгляды пользователя
-           worldview: str - хранит взгляд на мир пользователя
-           address: str - хранит адрес проживания пользователя
-           info_worldview: list - хранит список, со взглядами на мир
-           info_political: list - хранит список, с полит. взглядами
-           info_univer: list - хранит список, невалидных университетов
-       """
-
-    def __init__(self, d):
-        """
-        __init__ - служит для записи данных пользователя в различные поля
-        :param d: - передает словарь данных о человеке
-        """
-        self.__data = d
-        self.__height = float(d['height'])
-
-    @property
-    def height(self) -> float:
-        '''
-        height - метод, который вернет рост человека
-        :return: object
-        '''
-        return self.__height
 
 
 def sort_list(list_to_sort: list) -> list:
@@ -66,7 +30,7 @@ def bucket_sort(dict_to_sort: dict) -> list:
         sorted_keys = sorted_keys + (sort_list(bucket_list[i]))
     result_list = []
     for key in sorted_keys:
-        result_list.append(dict_to_sort[key])
+        result_list.append(Validator.Validator(dict_to_sort[key]))
     return result_list
 
 
@@ -79,5 +43,6 @@ if __name__ == "__main__":
     for j in data:
         dict_to_sort[float(j['height'])] = j
     sorted_list = bucket_sort(dict_to_sort)
-    with open(path2, encoding='utf-8', mode='w') as file:
+    print(sorted_list)
+    with open(path2, mode='w') as file:
         json.dump(sorted_list, file)
