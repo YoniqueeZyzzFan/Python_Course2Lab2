@@ -28,7 +28,7 @@ class File:
                 "В файле хранится неверный формат данных или файла по данному пути не существует")
 
     @property
-    def data(self):
+    def data(self) -> any:
         '''
         get_data - метод, который вернет данные содержащиеся в поле data
         :return: object
@@ -75,16 +75,16 @@ class Validator:
         self.__address = d['address']
 
     @property
-    def data(self):
+    def data(self) -> dict:
         '''
         get_data - метод, который вернет данные содержащиеся в поле data
-        :return: object
+        :return: dict - возвращает словарь со значениями
         '''
         return {'email': self.__email, 'height': self.__height, 'snils': self.__snils,
                 'passport_series': self.__passport_series, 'university': self.__university, 'age': self.__age,
                 'political_views': self.__political_views, 'worldview': self.__worldview, 'address': self.__address}
 
-    def validation(self):
+    def validation(self) -> str:
         """
         validation - служит для проверки корректности записей
             Возвращает имя поля, где данные записаны некорректно
@@ -122,7 +122,13 @@ class Validator:
         return "True"
 
 
-def validation_dict(path_to_data: str, path_to_save: str):
+def validation_dict(path_to_data: str, path_to_save: str) -> None:
+    """
+    validation_dict - фунцкия, которая производит валидацию всех данных в файле
+    path_to_data - путь к данным, которые нужно отвалидировать
+    path_to_save - путь, куда нужно сохранить валидные данные
+    return - None
+    """
     list_to_save = []
     dict_err = {"email": 0,
                 "height": 0,

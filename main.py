@@ -7,6 +7,11 @@ from package.bucket_sort import bucket_sort as bucket_sort
 
 
 def rename(dict_to_change: dict) -> dict:
+    """
+    Rename - фукция, которые переименовывает ключи у словаря
+    dict_to_change - словарь, в котором нужно изменить ключи
+    return - Возвращает нужный словарь
+    """
     new_dict = {}
     new_dict['email'] = dict_to_change['_Validator__email']
     new_dict['height'] = dict_to_change['_Validator__height']
@@ -21,6 +26,12 @@ def rename(dict_to_change: dict) -> dict:
 
 
 def sorting(path_to_sort: str, path_to_save: str) -> None:
+    """
+    Sorting - фунцкия сортировка по сегментам (bucket_sort)
+
+    path_to_sort - Путь к данным, которые надо отсортировать
+    path_to_save - Путь, куда надо сохранить отсортированные данные
+    """
     dict_to_sort = {}
     with open(path_to_sort, encoding='utf-8') as file:
         data = json.load(file)

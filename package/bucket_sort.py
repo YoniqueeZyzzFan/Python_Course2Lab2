@@ -3,6 +3,11 @@ from tqdm import tqdm
 
 
 def sort_list(list_to_sort: list) -> list:
+    '''
+    sort_list - функция, которая сортирует список
+    list_to_sort - список, которые необходимо отсортировать
+    return - list - Возвращает отсортированный список
+    '''
     for i in range(len(list_to_sort)):
         for j in range(i + 1, len(list_to_sort)):
             if list_to_sort[i] > list_to_sort[j]:
@@ -11,6 +16,11 @@ def sort_list(list_to_sort: list) -> list:
 
 
 def bucket_sort(dict_to_sort: dict) -> list:
+    '''
+    bucket_sort - функция сортировки по сегментам, алгоритмическая сложность О(n)
+    dict_to_sort - словарь с ключами, по которым будет производится сортировка
+    return - list - возвращает список отсортированных словарей
+    '''
     list_keys = list(dict_to_sort)
     x = max(list_keys)
     splitter = float(x) / float(len(list_keys))
