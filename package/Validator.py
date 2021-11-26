@@ -121,21 +121,8 @@ class Validator:
             return 'political'
         return "True"
 
-if __name__ == '__main__':
-    parser = argparse.ArgumentParser(description="main")
-    parser.add_argument(
-        "-input",
-        type=str,
-        help="Это обязательный строковый позиционный аргумент, который указывает, с какого файла будут считаны данные",
-        dest="file_input")
-    parser.add_argument(
-        "-output",
-        type=str,
-        help="Это необязательный позиционный аргумент, который указывает, куда будут сохранены валидные данные",
-        dest="file_output")
-    args = parser.parse_args()
-    file = File(args.file_input)
-    output = open(args.file_output, 'w', encoding='utf-8')
+
+def validation_dict(path_to_data: str, path_to_save: str):
     list_to_save = []
     dict_err = {"email": 0,
                 "height": 0,
@@ -147,7 +134,7 @@ if __name__ == '__main__':
                 "address": 0,
                 "political": 0,
                 "True": 0}
-
+    file = File(path_to_data)
     counter = 0
     for i in file.data:
         counter += 1
@@ -161,8 +148,8 @@ if __name__ == '__main__':
             else:
                 counter_false += 1
             progressbar.update(1)
-    json.dump(list_to_save, output)
-    output.close()
+    with open(path_to_save, mode='w') as output:
+        json.dump(list_to_save, output)
     print("Количество ошибок из-за опредленных полей: \nВсего пользователей: " +
           str(counter) +
           "\nЧисло валидных записей - " +
@@ -172,4 +159,3 @@ if __name__ == '__main__':
           str(counter_false))
     for i in dict_err:
         print(i + ": " + str(dict_err[i]))
-    output.close()

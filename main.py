@@ -1,7 +1,8 @@
 import argparse
 import json
+from json import JSONEncoder
 from tqdm import tqdm
-from package.Validator import Validator
+from package.Validator import validation_dict
 from package.bucket_sort import bucket_sort as bucket_sort
 
 
@@ -19,21 +20,9 @@ def rename(dict_to_change: dict) -> dict:
     return new_dict
 
 
-if __name__ == "__main__":
-    parser = argparse.ArgumentParser(description="sorting_valid")
-    parser.add_argument(
-        "-input",
-        type=str,
-        help="Это обязательный строковый позиционный аргумент, который указывает, с какого файла будут считаны данные",
-        dest="file_input")
-    parser.add_argument(
-        "-output",
-        type=str,
-        help="Это необязательный позиционный аргумент, который указывает, куда будут сохранены отсортированные данные",
-        dest="file_output")
-    args = parser.parse_args()
+def sorting(path_to_sort: str, path_to_save: str) -> None:
     dict_to_sort = {}
-    with open(args.file_input, encoding='utf-8') as file:
+    with open(path_to_sort, encoding='utf-8') as file:
         data = json.load(file)
     with tqdm(len(data), desc="Создание словаря с ключами для сортировки") as progressbar:
         for j in data:
@@ -43,10 +32,46 @@ if __name__ == "__main__":
     to_save = []
     for i in sorted_list:
         to_save.append(i.__dict__)
-    with open(args.file_output, encoding='utf-8', mode='w') as file:
-        json.dump(to_save, file)
-    with open(args.file_output, mode='r') as file:
+    with tqdm(1, desc="Сериализация данных в JSON и запись в файл") as progressbar:
+        with open(path_to_save, encoding='utf-8', mode='w') as file:
+            json.dump(to_save, file)
+        progressbar.update(1)
+    with open(path_to_save, mode='r') as file:
         data = json.load(file)
     load = []
     for i in data:
         load.append(rename(i))
+
+
+if __name__ == "__main__":
+    parser = argparse.ArgumentParser(description="sorting_valid")
+    group = parser.add_mutually_exclusive_group(required=True)
+    group.add_argument('-valid', '--validation', help='Запускает валидацию данных в файле')
+    group.add_argument('-sort', '--sorting', help='Запускает сортировку данных в файле')
+    group.add_argument('-vs', '--validsorting',
+                       help='Запускает валидацию данных и последующую их сортировку, если хотите использовать эту функцию, '
+                            'то введите еще один аргумент, который будет указывать путь сохранения отсортированных данных')
+
+    parser.add_argument(
+        "-input",
+        type=str,
+        help="Это обязательный строковый позиционный аргумент, который указывает, с какого файла будут считаны данные",
+        dest="file_input",
+        required=True)
+    parser.add_argument(
+        "-output",
+        type=str,
+        help="Это необязательный позиционный аргумент, который указывает, куда будут сохранены отсортированные/валидированные/валидные отсортированные данные",
+        dest="file_output",
+        required=True)
+    args = parser.parse_args()
+    dict_to_sort = {}
+    if args.validation is not None:
+        validation_dict(args.file_input, args.file_output)
+    if args.sorting is not None:
+        sorting(args.file_input, args.file_output)
+    if args.validsorting is not None:
+        validation_dict(args.file_input, args.file_output)
+        sorting(args.file_output, args.file_output)
+
+
