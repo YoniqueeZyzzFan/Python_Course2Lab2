@@ -84,5 +84,12 @@ if __name__ == "__main__":
     if args.validsorting is not None:
         validation_dict(args.file_input, args.file_output)
         sorting(args.file_output, args.file_output)
+        print('____________________________\n')
+        print('Unserialize test')
+        with open (args.file_output) as file:
+            data = json.load(file)
+        for i in range(len(data)):
+            data[i] = rename(data[i])
+        print(data)
 
 
