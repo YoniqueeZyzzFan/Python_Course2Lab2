@@ -15,13 +15,16 @@ def sort_list(list_to_sort: list) -> list:
     return list_to_sort
 
 
-def bucket_sort(dict_to_sort: dict) -> list:
+def bucket_sort(dict_to_sort: list) -> list:
     '''
     bucket_sort - функция сортировки по сегментам, алгоритмическая сложность О(n)
     dict_to_sort - словарь с ключами, по которым будет производится сортировка
     return - list - возвращает список отсортированных словарей
     '''
-    list_keys = list(dict_to_sort)
+    all_keys = []
+    for i in range(1, len(dict_to_sort)):
+        all_keys.append(dict_to_sort[i][0])
+    list_keys = list(all_keys)
     x = max(list_keys)
     splitter = float(x) / float(len(list_keys))
     bucket_list = []
@@ -38,9 +41,9 @@ def bucket_sort(dict_to_sort: dict) -> list:
     sorted_keys = []
     with tqdm(bucket_list, desc="Сортировка сегментов") as progressbar:
         for i in range(len(bucket_list)):
-            sorted_keys = sorted_keys + (sort_list(bucket_list[i]))
+            sorted_keys = sorted_keys + sort_list(bucket_list[i])
             progressbar.update(1)
     result_list = []
     for key in sorted_keys:
-        result_list.append(Validator(dict_to_sort[key]))
+            result_list.append({key, Validator(dict_to_sort[key])})
     return result_list

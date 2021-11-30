@@ -32,12 +32,12 @@ def sorting(path_to_sort: str, path_to_save: str) -> None:
     path_to_sort - Путь к данным, которые надо отсортировать
     path_to_save - Путь, куда надо сохранить отсортированные данные
     """
-    dict_to_sort = {}
+    dict_to_sort = [{}]
     with open(path_to_sort, encoding='utf-8') as file:
         data = json.load(file)
     with tqdm(len(data), desc="Создание словаря с ключами для сортировки") as progressbar:
         for j in data:
-            dict_to_sort[float(j['height'])] = j
+            dict_to_sort.append([float(j['height']), j])
             progressbar.update(1)
     sorted_list = bucket_sort(dict_to_sort)
     to_save = []
