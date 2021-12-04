@@ -1,7 +1,7 @@
 import argparse
 import json
 from json import JSONEncoder
-from tqdm import tqdm
+from tqdm import tqdm, trange
 from package.Validator import validation_dict
 from package.bucket_sort import bucket_sort as bucket_sort
 
@@ -32,13 +32,12 @@ def sorting(path_to_sort: str, path_to_save: str) -> None:
     path_to_sort - Путь к данным, которые надо отсортировать
     path_to_save - Путь, куда надо сохранить отсортированные данные
     """
-    dict_to_sort = [{}]
+    dict_to_sort = []
     with open(path_to_sort, encoding='utf-8') as file:
         data = json.load(file)
-    with tqdm(len(data), desc="Создание словаря с ключами для сортировки") as progressbar:
-        for j in data:
-            dict_to_sort.append([float(j['height']), j])
-            progressbar.update(1)
+    print('Создание словаря с ключами для сортировки:')
+    for j in trange(len(data)):
+        dict_to_sort.append(data[j])
     sorted_list = bucket_sort(dict_to_sort)
     to_save = []
     for i in sorted_list:
@@ -84,12 +83,10 @@ if __name__ == "__main__":
     if args.validsorting is not None:
         validation_dict(args.file_input, args.file_output)
         sorting(args.file_output, args.file_output)
-        print('____________________________\n')
-        print('Unserialize test')
-        with open (args.file_output) as file:
-            data = json.load(file)
-        for i in range(len(data)):
-            data[i] = rename(data[i])
-        print(data)
-
-
+        # print('____________________________\n')
+        # print('Unserialize test')
+        # with open(args.file_output) as file:
+        #    data = json.load(file)
+        # for i in range(len(data)):
+        #    data[i] = rename(data[i])
+        # print(data)
